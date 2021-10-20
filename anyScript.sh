@@ -17,7 +17,7 @@ fi
 
 # run auto-update daily, not if file disableAutoUpdate exists or env AUTOUPDATE_DISABLE is set
 if [ ! -z "${gitbin}" ] && [ ! -f "$(dirname "$0")/disableAutoUpdate" ] && [ -z "$AUTOUPDATE_DISABLE" ] && [ -d "$(dirname "$0")/.git" ]; then
-	mainBranche=${AUTOUPDATE_MAIN_BRANCHE:=main}
+	gitBranche=${AUTOUPDATE_BRANCHE:=main}
 	scriptName=$(basename "$0")
 	today=$(date +'%Y-%m-%d')
 	autoUpdateStatusFile="/tmp/.${scriptName}-autoUpdate"
@@ -26,7 +26,7 @@ if [ ! -z "${gitbin}" ] && [ ! -f "$(dirname "$0")/disableAutoUpdate" ] && [ -z 
         touch "$autoUpdateStatusFile"
         cd "$(dirname "$0")" || exit 1
         $gitbin fetch
-        commits=$(git rev-list HEAD...origin/"$mainBranche" --count)
+        commits=$(git rev-list HEAD...origin/"$gitBranche" --count)
         if [ $commits -gt 0 ]; then
             echo "[autoUpdate] Found updates..."
             $gitbin pull --force
