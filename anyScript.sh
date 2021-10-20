@@ -22,7 +22,7 @@ if [ ! -z "${gitbin}" ] && [ ! -f "$(dirname "$0")/disableAutoUpdate" ] && [ -z 
 	scriptName=$(basename "$0")
 	today=$(date +'%Y-%m-%d')
 	autoUpdateStatusFile="/tmp/.${scriptName}-autoUpdate"
-    if [ ! -f "$autoUpdateStatusFile" ] || [ "${today}" != "$(date -r '$autoUpdateStatusFile' +'%Y-%m-%d')" ]; then
+    if [ ! -f "$autoUpdateStatusFile" ] || [ "${today}" != "$(date -r ${autoUpdateStatusFile}' +'%Y-%m-%d')" ]; then
         echo "[autoUpdate] Checking git-updates of ${scriptName}..."
         touch "$autoUpdateStatusFile"
         cd "$(dirname "$0")" || exit 1
