@@ -15,7 +15,6 @@ if [ -z $gitbin ]; then
 	fi
 fi
 
-echo "test me"
 # run auto-update daily, not if file disableAutoUpdate exists or env AUTOUPDATE_DISABLE is set
 if [ ! -z "${gitbin}" ] && [ ! -f "$(dirname "$0")/disableAutoUpdate" ] && [ -z "$AUTOUPDATE_DISABLE" ] && [ -d "$(dirname "$0")/.git" ]; then
 	mainBranche=${AUTOUPDATE_MAIN_BRANCHE:=main}
