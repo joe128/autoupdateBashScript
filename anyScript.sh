@@ -21,23 +21,24 @@ if [ ! -z "${gitbin}" ] && [ ! -f "$(dirname "$0")/disableAutoUpdate" ] && [ -z 
 	scriptName=$(basename "$0")
 	today=$(date +'%Y-%m-%d')
 	autoUpdateStatusFile="/tmp/.${scriptName}-autoUpdate"
-    if [ ! -f "$autoUpdateStatusFile" ] || [ "${today}" != "$(date -r ${autoUpdateStatusFile} +'%Y-%m-%d')" ]; then
-        echo "[autoUpdate] Checking git-updates of ${scriptName}..."
-        touch "$autoUpdateStatusFile"
-        cd "$(dirname "$0")" || exit 1
-        $gitbin fetch
-        commits=$(git rev-list HEAD...origin/"$gitBranche" --count)
-        if [ $commits -gt 0 ]; then
-            echo "[autoUpdate] Found updates..."
-            $gitbin pull --force
-            echo "[autoUpdate] Executing new version..."
-            exec "$(pwd -P)/${scriptName}" "$@"
-            # In case executing new fails
-            echo "[autoUpdate] Executing new version failed."
-            exit 1
-        fi
-        echo "[autoUpdate] No updates available."
-    else
-        echo "[autoUpdate] Already checked for updates today."
-    fi
+	if [ -n "${AUTOUPDATE_CHECK_EVERY_TIME}" ] || [ ! -f "$autoUpdateStatusFile" ] || [ "${today}" != "$(date -r ${autoUpdateStatusFile} +'%Y-%m-%d')" ]; then
+		echo "[autoUpdate] Checking git-updates of ${scriptName}..."
+		touch "$autoUpdateStatusFile"
+		cd "$(dirname "$0")" || exit 1
+		$gitbin fetch
+		commits=$(git rev-list HEAD...origin/"$gitBranche" --count)
+		if [ $commits -gt 0 ]; then
+			echo "[autoUpdate] Found updates ($commits commits)..."
+			[ -z "${AUTOUPDATE_NO_LOCAL_RESET}" ] && $gitbin reset --hard 
+			$gitbin pull --force
+			echo "[autoUpdate] Executing new version..."
+			exec "$(pwd -P)/${scriptName}" "$@"
+			# In case executing new fails
+			echo "[autoUpdate] Executing new version failed."
+			exit 1
+		fi
+		echo "[autoUpdate] No updates available."
+	else
+		echo "[autoUpdate] Already checked for updates today."
+	fi
 fi
