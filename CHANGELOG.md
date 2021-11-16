@@ -1,0 +1,10 @@
+# Changelog
+
+## [1.0.0] - 2021-11-05
+### Added
+ - first Release, including
+   - AUTOUPDATE_DISABLE
+   - AUTOUPDATE_NO_LOCAL_RESET
+   - AUTOUPDATE_CHECK_EVERY_TIME
+   - AUTOUPDATE_BRANCH
+   - AUTOUPDATE_GIT_BIN
