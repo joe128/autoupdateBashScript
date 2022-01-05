@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0] - 2022-01-05
+### Added
+ - auto-detect of checked out branch
+### Deleted
+ - AUTOUPDATE_BRANCH
+
 ## [2.0.0] - 2021-11-25
 ### Changed
  - change ``disableAutoUpdate`` to ``.autoUpdateDisable``

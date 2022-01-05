@@ -18,7 +18,6 @@ fi
 # run auto-update daily, not if file disableAutoUpdate exists or env AUTOUPDATE_DISABLE is set
 if [ -n "${gitbin}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisable" ] && [ -z "$AUTOUPDATE_DISABLE" ] && [ -d "$(dirname "$0")/.git" ]; then
     [ -z "${AUTOUPDATE_NO_LOCAL_RESET}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisableHardReset" ] && doHardReset=1 || doHardReset=0
-    gitBranch=${AUTOUPDATE_BRANCH:=main}
     scriptName=$(basename "$0")
     today=$(date +'%Y-%m-%d')
     autoUpdateStatusFile="/tmp/.${scriptName}-autoUpdate"
@@ -27,7 +26,10 @@ if [ -n "${gitbin}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisable" ] && [ -z "
         touch "$autoUpdateStatusFile"
         cd "$(dirname "$0")" || exit 1
         $gitbin fetch
-        commits=$(git rev-list HEAD...origin/"$gitBranch" --count)
+        gitBranch=$(${gitbin} rev-parse --abbrev-ref HEAD)
+        gitBranch=${gitBranch:=main}
+        origin=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
+        [ -n "$origin" ] && commits=$(git rev-list HEAD...origin/"$gitBranch" --count) || commits=0
         if [ $commits -gt 0 ]; then
             echo "[autoUpdate] Found updates ($commits commits)..."
             [ $doHardReset -gt 0 ] && $gitbin reset --hard
