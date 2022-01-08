@@ -28,12 +28,15 @@ if [ -n "${gitbin}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisable" ] && [ -z "
         $gitbin fetch
         gitBranch=$(${gitbin} rev-parse --abbrev-ref HEAD)
         gitBranch=${gitBranch:=main}
-        origin=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")
-        [ -n "$origin" ] && commits=$(git rev-list HEAD...origin/"$gitBranch" --count) || commits=0
+        origin=$(${gitbin} for-each-ref --format='%(upstream:short)' "$(${gitbin} symbolic-ref -q HEAD)")
+        [ -n "$origin" ] && commits=$(${gitbin} rev-list HEAD..."$origin" --count) || commits=0
         if [ $commits -gt 0 ]; then
             echo "[autoUpdate] Found updates ($commits commits)..."
             [ $doHardReset -gt 0 ] && $gitbin reset --hard
             $gitbin pull --force
+            localTip=$(${gitbin} show --abbrev-commit --format=oneline $(${gitbin} rev-list --max-count=1 @{u}) | head -1)
+            echo "[autoUpdate] source is now at commit '$localTip'"
+
             echo "[autoUpdate] Executing new version..."
             exec "$(pwd -P)/${scriptName}" "$@"
             # In case executing new fails

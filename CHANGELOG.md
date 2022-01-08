@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.0] - 2022-01-08
+### Added
+ - show branch-tip after update
+### Fixed
+ - using only configured gitBin instead of hard coded ``git``
+
 ## [3.0.0] - 2022-01-05
 ### Added
  - auto-detect of checked out branch
