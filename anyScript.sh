@@ -34,13 +34,15 @@ if [ -n "${gitbin}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisable" ] && [ -z "
             echo "[autoUpdate] Found updates ($commits commits)..."
             [ $doHardReset -gt 0 ] && $gitbin reset --hard
             $gitbin pull --force
-            localTip=$(${gitbin} show --abbrev-commit --format=oneline $(${gitbin} rev-list --max-count=1 @{u}) | head -1)
-            echo "[autoUpdate] source is now at commit '$localTip'"
+            if [ ! $? ]; then
+                localTip=$(${gitbin} show --abbrev-commit --format=oneline $(${gitbin} rev-list --max-count=1 @{u}) | head -1)
+                echo "[autoUpdate] source is now at commit '$localTip'"
 
-            echo "[autoUpdate] Executing new version..."
-            exec "$(pwd -P)/${scriptName}" "$@"
-            # In case executing new fails
-            echo "[ERR][autoUpdate] Executing new version failed."
+                echo "[autoUpdate] Executing new version..."
+                exec "$(pwd -P)/${scriptName}" "$@"
+            fi
+            # In case there were an error (during pull or executing new)
+            echo "[ERR][autoUpdate] Pulling or executing new version failed."
             exit 1
         fi
         echo "[autoUpdate] No updates available."

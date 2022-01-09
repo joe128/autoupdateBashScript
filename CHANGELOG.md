@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.1] - 2022-01-09
+### Fixed
+ - abort if there were an error during pull of new commits, to prevent an infinite loop
+
 ## [3.1.0] - 2022-01-08
 ### Added
  - show branch-tip after update
