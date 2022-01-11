@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.2] - 2022-01-11
+### Fixed
+ - Fix check if there were errors during pull of new commits
+
 ## [3.1.1] - 2022-01-09
 ### Fixed
  - abort if there were an error during pull of new commits, to prevent an infinite loop
