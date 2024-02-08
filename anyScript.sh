@@ -33,7 +33,7 @@ if [ -n "${gitbin}" ] && [ ! -f "$(dirname "$0")/.autoUpdateDisable" ] && [ -z "
         if [ $commits -gt 0 ]; then
             echo "[autoUpdate] Found updates ($commits commits)..."
             [ $doHardReset -gt 0 ] && $gitbin reset --hard
-            $gitbin pull --force
+            $gitbin pull --force --recurse-submodules
             if [ $? -eq 0 ]; then
                 localTip=$(${gitbin} show --abbrev-commit --format=oneline $(${gitbin} rev-list --max-count=1 @{u}) | head -1)
                 echo "[autoUpdate] source is now at commit '$localTip'"

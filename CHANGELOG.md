@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.2.0] - 2024-02-08
+### Added
+ - pull changes for all submodules (recursively)
+
 ## [3.1.2] - 2022-01-11
 ### Fixed
  - Fix check if there were errors during pull of new commits
